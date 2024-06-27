@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
@@ -82,9 +83,51 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.save(patient);
 
         mapResult.put(Literals.STATUS, Literals.TRUE);
-        mapResult.put(Literals.MESSAGE, "Patient added successfully");
+        mapResult.put(Literals.MESSAGE, MessageCode.PATIENT_CREATED);
         return mapResult;
     }
 
 
+
+    @Override
+    @Transactional
+    public Map<String, Object> deletePatient(Long patientId) {
+        Map<String, Object> mapResult = new HashMap<>();
+        mapResult.put(Literals.STATUS, Literals.FALSE);
+        Optional<Patients> patients = patientRepository.findById(patientId);
+        if (patients.isPresent()) {
+            Patients patientDelete = patients.get();
+            patientRepository.delete(patientDelete);
+            mapResult.put(Literals.STATUS, Literals.TRUE);
+            mapResult.put(Literals.MESSAGE, MessageCode.DELETE_DOCTOR);
+        } else {
+            mapResult.put(Literals.MESSAGE, MessageCode.DOCTOR_NOT_FOUND);
+        }
+        return mapResult;
+    }
+
+    @Override
+    public Map<String, Object> getDoctorAccordingSymbiont(Long patientId) {
+        Map<String, Object> mapResult = new HashMap<>();
+        mapResult.put(Literals.STATUS, Literals.FALSE);
+
+        Patients patient = patientRepository.findById(patientId).orElse(null);
+        if (patient == null) {
+            mapResult.put(Literals.MESSAGE, MessageCode.PATIENT_NOT_FOUND);
+            return mapResult;
+        }
+
+        Long cityId = patient.getCity().getId();
+        Long symptomId = patient.getSymptom().getId();
+
+        List<Doctor> doctors = doctorRepository.findDoctorsByCityAndSymptom(cityId, symptomId);
+        if (doctors.isEmpty()) {
+            mapResult.put(Literals.MESSAGE ,"No doctors found for the given symptom in the patient's city");
+        } else {
+            mapResult.put(Literals.STATUS, Literals.TRUE);
+            mapResult.put(Literals.DOCTOR, doctors);
+        }
+        return mapResult;
+
+    }
 }

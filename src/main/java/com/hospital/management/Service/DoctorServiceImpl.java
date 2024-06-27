@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
@@ -84,6 +85,23 @@ public class DoctorServiceImpl implements DoctorService {
         mapResult.put(Literals.STATUS, Literals.TRUE);
         mapResult.put(Literals.MESSAGE, MessageCode.DOCTOR_ADD);
 
+        return mapResult;
+    }
+
+    @Override
+    @Transactional
+    public Map<String, Object> deleteDoctor(Long doctorId) {
+        Map<String, Object> mapResult = new HashMap<>();
+        mapResult.put(Literals.STATUS, Literals.FALSE);
+        Optional<Doctor> doctor = doctorRepository.findById(doctorId);
+        if (doctor.isPresent()) {
+            Doctor doctorDelete = doctor.get();
+            doctorRepository.delete(doctorDelete);
+            mapResult.put(Literals.STATUS, Literals.TRUE);
+            mapResult.put(Literals.MESSAGE, MessageCode.DELETE_DOCTOR);
+        } else {
+            mapResult.put(Literals.MESSAGE, MessageCode.DOCTOR_NOT_FOUND);
+        }
         return mapResult;
     }
 }

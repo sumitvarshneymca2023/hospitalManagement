@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -37,6 +34,22 @@ public class DoctorController {
         try {
             log.info("ADD DOCTOR :: {}",doctorDTO);
             Map<String, Object> resultMap = doctorService.addDoctor(doctorDTO);
+            if (resultMap.get(Literals.STATUS).equals(Literals.TRUE)) {
+                return ResponseHandler.response(resultMap.get(Literals.RESPONSE), resultMap.get(Literals.MESSAGE).toString(), true, HttpStatus.OK);
+            }
+            return ResponseHandler.response(resultMap.get(Literals.RESPONSE), resultMap.get(Literals.MESSAGE).toString(), false, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error(Literals.CATCH_EXCEPTION, e);
+        }
+        return ResponseHandler.response(null, MessageCode.SOMETHING_WENT_WRONG, false, HttpStatus.BAD_REQUEST);
+    }
+
+    @Operation(method = "DELETE DOCTOR", description = "This can be used to delete doctor")
+    @DeleteMapping(value = UrlMapping.DELETE_DOCTOR)
+    public ResponseEntity<Object> deleteDoctors(@RequestParam Long doctorId) {
+        try {
+            log.info("DELETE DOCTOR :: {}", doctorId);
+            Map<String, Object> resultMap = doctorService.deleteDoctor(doctorId);
             if (resultMap.get(Literals.STATUS).equals(Literals.TRUE)) {
                 return ResponseHandler.response(resultMap.get(Literals.RESPONSE), resultMap.get(Literals.MESSAGE).toString(), true, HttpStatus.OK);
             }

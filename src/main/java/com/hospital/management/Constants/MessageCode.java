@@ -30,6 +30,14 @@ public class MessageCode {
     public static final String DOCTOR_NOT_AVAILABLE = "We are still waiting to expand to your location.";
 
     public static final String DOCTOR_NOT_AVAILABLE_FOR_THIS_SYMPTOM =  "There isn’t any doctor present at your location for your symptom.";
+    public static final String DELETE_DOCTOR =  "Doctor deleted successfully.";
+
+    public static final String DOCTOR_NOT_FOUND =  "Doctor not found.";
+
+    public static final String DOCTOR_FETCHED = "Doctors fetched successfully";
+
+    public static final String PATIENT_NOT_FOUND = "Patient not found.";
+
 
 
 

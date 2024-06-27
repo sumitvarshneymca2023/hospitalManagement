@@ -10,6 +10,7 @@ import com.hospital.management.Repository.DoctorRepository;
 import com.hospital.management.Repository.PatientsRepository;
 import com.hospital.management.Repository.SymptomRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.Map;
 
 
 @Service
+@Slf4j
 public class PatientServiceImpl implements PatientService {
 
 
@@ -53,23 +55,29 @@ public class PatientServiceImpl implements PatientService {
         City city = cityRepository.findCity(patientDTO.getCity().toUpperCase());
         if (city == null) {
             mapResult.put(Literals.MESSAGE, MessageCode.CITY_NOT_FOUND);
+            return mapResult;
         }
-        Symptom symptom = symptomRepository.findSymptom(patientDTO.getSymptom().toUpperCase());
 
+        Symptom symptom = symptomRepository.findSymptom(patientDTO.getSymptom().toUpperCase());
         if (symptom == null) {
             mapResult.put(Literals.MESSAGE, MessageCode.SYMPTOM_NOT_FOUND);
+            return mapResult;
         }
 
+        List<Doctor> doctors = doctorRepository.findByCityId(city.getId());
+        if (doctors.isEmpty()) {
+            mapResult.put(Literals.MESSAGE, MessageCode.DOCTOR_NOT_AVAILABLE);
+            return mapResult;
+        }
+
+        List<Speciality> speciality = symptom.getSpecialities();
+        List<Doctor> symptomDoctor = doctorRepository.findBySpecialityId(speciality.get(0).getId());
+        if (symptomDoctor.isEmpty()) {
+            mapResult.put(Literals.MESSAGE, MessageCode.DOCTOR_NOT_AVAILABLE_FOR_THIS_SYMPTOM);
+            return mapResult;
+        }
         patient.setCity(city);
         patient.setSymptom(symptom);
-
-        List<Doctor> doctor = doctorRepository.findByCityId(city.getId());
-
-        if (doctor.isEmpty()) {
-            mapResult.put(Literals.MESSAGE, MessageCode.DOCTOR_NOT_AVAILABLE);
-        }
-        patient.setSymptom(symptom);
-
         // Save Patient
         patientRepository.save(patient);
 

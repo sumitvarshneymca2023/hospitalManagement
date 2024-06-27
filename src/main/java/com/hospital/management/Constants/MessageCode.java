@@ -25,9 +25,11 @@ public class MessageCode {
 
     public static final String  SYMPTOM_EXISTS = "Symptom already exists";
 
-    public static final String SYMPTOM_NOT_FOUND = "Symptom not found. only Arthritis, Back Pain, Tissue injuries, Dysmenorrhea, Skin infection, skin burn, Ear pain";
+    public static final String SYMPTOM_NOT_FOUND = "Symptom not found. only Arthritis, Back_Pain, Tissue_injuries, Dysmenorrhea, Skin_infection, skin_burn, Ear_pain";
 
-    public static final String DOCTOR_NOT_AVAILABLE = "We are still waiting to expand to your location";
+    public static final String DOCTOR_NOT_AVAILABLE = "We are still waiting to expand to your location.";
+
+    public static final String DOCTOR_NOT_AVAILABLE_FOR_THIS_SYMPTOM =  "There isn’t any doctor present at your location for your symptom.";
 
 
 

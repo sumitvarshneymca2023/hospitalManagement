@@ -10,5 +10,5 @@ public interface PatientService {
 
     Map<String, Object> deletePatient(Long patientId);
 
-    Map<String, Object> getDoctorAccordingSymbiont(Long patientId);
+    Map<String, Object> getDoctorAccordingSymptom(Long patientId);
 }

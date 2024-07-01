@@ -69,7 +69,7 @@ public class PatientsController {
     public ResponseEntity<Object> getDoctorsBySymptom(@RequestParam Long patientId) {
         try {
             log.info("GET DOCTOR ACCORDING SYMPTOM :: {}", patientId);
-            Map<String, Object> resultMap = patientService.getDoctorAccordingSymbiont(patientId);
+            Map<String, Object> resultMap = patientService.getDoctorAccordingSymptom(patientId);
             if (resultMap.get(Literals.STATUS).equals(Literals.TRUE)) {
                 return ResponseHandler.response(resultMap.get(Literals.RESPONSE), resultMap.get(Literals.MESSAGE).toString(), true, HttpStatus.OK);
             }

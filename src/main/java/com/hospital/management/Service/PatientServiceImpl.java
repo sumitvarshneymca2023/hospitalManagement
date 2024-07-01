@@ -107,27 +107,36 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Map<String, Object> getDoctorAccordingSymbiont(Long patientId) {
+    public Map<String, Object> getDoctorAccordingSymptom(Long patientId) {
         Map<String, Object> mapResult = new HashMap<>();
         mapResult.put(Literals.STATUS, Literals.FALSE);
 
-        Patients patient = patientRepository.findById(patientId).orElse(null);
-        if (patient == null) {
-            mapResult.put(Literals.MESSAGE, MessageCode.PATIENT_NOT_FOUND);
-            return mapResult;
+        try {
+            Patients patient = patientRepository.findById(patientId).orElse(null);
+            if (patient == null) {
+                mapResult.put(Literals.MESSAGE, MessageCode.PATIENT_NOT_FOUND);
+                return mapResult;
+            }
+
+            Long cityId = patient.getCity().getId();
+            Long symptomId = patient.getSymptom().getId();
+
+            List<Doctor> doctors = doctorRepository.findDoctorsByCityAndSymptom(cityId, symptomId);
+            if (doctors.isEmpty()) {
+                mapResult.put(Literals.MESSAGE, "No doctors found for the given symptom in the patient's city");
+            } else {
+                mapResult.put(Literals.STATUS, Literals.TRUE);
+                mapResult.put(Literals.RESPONSE, doctors);
+                mapResult.put(Literals.MESSAGE, MessageCode.DOCTOR_FETCHED );
+
+            }
+        } catch (Exception e) {
+            log.error("Exception occurred while fetching doctors: ", e);
+            mapResult.put(Literals.MESSAGE, MessageCode.SOMETHING_WENT_WRONG);
         }
 
-        Long cityId = patient.getCity().getId();
-        Long symptomId = patient.getSymptom().getId();
-
-        List<Doctor> doctors = doctorRepository.findDoctorsByCityAndSymptom(cityId, symptomId);
-        if (doctors.isEmpty()) {
-            mapResult.put(Literals.MESSAGE ,"No doctors found for the given symptom in the patient's city");
-        } else {
-            mapResult.put(Literals.STATUS, Literals.TRUE);
-            mapResult.put(Literals.DOCTOR, doctors);
-        }
         return mapResult;
-
     }
+
+
 }

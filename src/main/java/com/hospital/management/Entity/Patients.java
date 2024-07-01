@@ -17,11 +17,11 @@ public class Patients extends BaseEntity {
 
     private String mobileNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "symptom_id")
     private Symptom symptom;
 

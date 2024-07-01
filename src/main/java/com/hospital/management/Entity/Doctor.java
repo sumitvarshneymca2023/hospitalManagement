@@ -1,6 +1,7 @@
 package com.hospital.management.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,7 +11,7 @@ public class Doctor extends BaseEntity {
 
     private String doctorName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
@@ -18,7 +19,7 @@ public class Doctor extends BaseEntity {
 
     private String mobileNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "speciality_id")
     private Speciality speciality;
 

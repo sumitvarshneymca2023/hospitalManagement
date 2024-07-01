@@ -1,4 +1,4 @@
 
-![Screenshot 2024-06-29 003359](https://github.com/sumitvarshneymca2023/hospitalManagement/assets/146240252/acfd19fc-b14b-4239-a1de-54b80e97edef)
 
-![Screenshot 2024-06-29 003351](https://github.com/sumitvarshneymca2023/hospitalManagement/assets/146240252/a43bb51d-4f63-4023-9a6b-529540daf44b)
+![Screenshot 2024-07-01 124650](https://github.com/sumitvarshneymca2023/hospitalManagement/assets/146240252/de81553b-162b-44f1-aa5f-65481d6a6049)![Screenshot 2024-07-01 124712](https://github.com/sumitvarshneymca2023/hospitalManagement/assets/146240252/f6e24a24-ab3f-464a-a9b8-dc2fc36751ef)
+

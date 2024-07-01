@@ -3,6 +3,7 @@ package com.hospital.management.Service;
 
 import com.hospital.management.Constants.Literals;
 import com.hospital.management.Constants.MessageCode;
+import com.hospital.management.Dto.DoctorsDTO;
 import com.hospital.management.Dto.PatientDTO;
 import com.hospital.management.Entity.*;
 import com.hospital.management.Repository.CityRepository;
@@ -14,10 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -121,10 +119,12 @@ public class PatientServiceImpl implements PatientService {
             Long cityId = patient.getCity().getId();
             Long symptomId = patient.getSymptom().getId();
 
-            List<Doctor> doctors = doctorRepository.findDoctorsByCityAndSymptom(cityId, symptomId);
+            List<DoctorsDTO> doctors = doctorRepository.findDoctorsByCityAndSymptom(cityId, symptomId);
+
             if (doctors.isEmpty()) {
-                mapResult.put(Literals.MESSAGE, "No doctors found for the given symptom in the patient's city");
+                mapResult.put(Literals.MESSAGE, "There isn’t any doctor present at your location for your symptom");
             } else {
+                List<Map<String, Object>> mappedDoctors = mapDoctorDTOResponse(doctors);
                 mapResult.put(Literals.STATUS, Literals.TRUE);
                 mapResult.put(Literals.RESPONSE, doctors);
                 mapResult.put(Literals.MESSAGE, MessageCode.DOCTOR_FETCHED );
@@ -138,5 +138,22 @@ public class PatientServiceImpl implements PatientService {
         return mapResult;
     }
 
+
+
+    private List<Map<String, Object>> mapDoctorDTOResponse(List<DoctorsDTO> doctorDTOs) {
+        List<Map<String, Object>> response = new ArrayList<>();
+        for (DoctorsDTO doctorDTO : doctorDTOs) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("doctorId", doctorDTO.getDoctorId());
+            map.put("doctorName", doctorDTO.getDoctorName());
+            map.put("email", doctorDTO.getEmail());
+            map.put("mobileNumber", doctorDTO.getMobileNumber());
+            map.put("cityId", doctorDTO.getCityId());
+            map.put("specialityId", doctorDTO.getSpecialityId());
+            map.put("specialities", doctorDTO.getSpecialities());
+            response.add(map);
+        }
+        return response;
+    }
 
 }
